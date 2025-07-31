@@ -2,9 +2,10 @@ fastapi==0.104.1
 uvicorn[standard]==0.24.0
 pydantic==2.5.0
 requests==2.31.0
-PyPDF2==3.0.1
+pdfplumber==0.9.0  # Downgrade to avoid Rust issues
 openai==1.51.2
-sentence-transformers==3.2.1
+faiss-cpu==1.7.4
 numpy==1.26.4
 python-dotenv==1.0.0
 setuptools==75.1.0
+wheel==0.44.0  # Ensure wheel builds
