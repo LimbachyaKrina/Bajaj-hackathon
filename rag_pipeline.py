@@ -10,13 +10,19 @@ from pathlib import Path
 from openai import OpenAI
 from utils import chunk_text, clean_text, table_to_markdown
 from responder import generate_structured_answer
-
-# Load OpenAI key from .env (make sure it's loaded before import)
 import os
-from dotenv import load_dotenv
-load_dotenv()
+from openai import OpenAI
+from langchain.embeddings import OpenAIEmbeddings
+from langchain.vectorstores import FAISS
 
-client = OpenAI(api_key=os.getenv("RAY_OPENAI_API_KEY"))
+
+
+api_key = os.getenv("RAY_OPENAI_API_KEY")
+if not api_key:
+    raise RuntimeError("❌ RAY_OPENAI_API_KEY is not set in environment variables!")
+
+client = OpenAI(api_key=api_key)
+
 
 EMBED_MODEL = "text-embedding-3-small"
 INDEX_PATH = "omniscient.index"
