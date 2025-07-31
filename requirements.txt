@@ -12,7 +12,7 @@ pdfplumber==0.10.0
 pdfminer.six==20221105
 
 # AI/ML and Embeddings
-openai==1.98.0
+openai==1.12.0         # <- Use a stable version unless you specifically need 1.98.0
 faiss-cpu==1.7.4
 numpy==1.24.3
 
@@ -35,6 +35,3 @@ pandas==2.3.1
 
 # JSON handling (for benchmarking)
 json5==0.9.14
-
-
-python-dotenv
