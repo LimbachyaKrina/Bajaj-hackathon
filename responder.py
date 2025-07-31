@@ -2,10 +2,16 @@
 from openai import OpenAI
 import os
 import re
-from dotenv import load_dotenv
-load_dotenv()
+from langchain.llms import OpenAI as LangOpenAI
 
-client = OpenAI(api_key=os.getenv("RAY_OPENAI_API_KEY"))
+api_key = os.getenv("RAY_OPENAI_API_KEY")
+if not api_key:
+    raise RuntimeError("❌ RAY_OPENAI_API_KEY is not set in environment variables!")
+
+client = OpenAI(api_key=api_key)
+
+llm = LangOpenAI(openai_api_key=api_key)
+# when i am using the llm model (omt)
 
 MODEL_NAME = "gpt-4o"
 
