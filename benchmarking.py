@@ -17,24 +17,84 @@ client = OpenAI(api_key=os.getenv("RAY_OPENAI_API_KEY"))
 # print("client : ",client)
 TEST_SET = [
     {
-        "question": "What is the grace period for premium payment under the National Parivar Mediclaim Plus Policy?",
+        "question": "What is the grace period for premium payment?",
         "expected": "The Grace Period for payment of the premium shall be thirty days."
     },
     {
-        "question": "What is the waiting period for pre-existing diseases to be covered?",
-        "expected": "Covered after 36 months of continuous coverage"
+        "question": "After how long are pre-existing diseases covered?",
+        "expected": "Covered after 36 months of continuous coverage."
     },
     {
-        "question": "Does this policy cover maternity expenses and under what conditions?",
-        "expected": "female Insured Person should have been continuously covered for at least 24 months"
+        "question": "Does this policy cover maternity expenses, and what are the eligibility conditions?",
+        "expected": "The female Insured Person should have been continuously covered for at least 24 months before availing this benefit."
     },
     {
-        "question": "Are medical expenses for an organ donor covered under this policy?",
-        "expected": "expenses incurred in respect of an organ donor’s Hospitalisation"
+        "question": "What is the cataract surgery limit under Plan A?",
+        "expected": "Up to 15% of SI or INR 60,000 whichever is lower."
     },
     {
-        "question": "What is the limit for cataract surgery under Plan A?",
-        "expected": "Up to 15% of SI or INR 60,000 whichever is lower"
+        "question": "Does the policy cover expenses for an organ donor?",
+        "expected": "The policy covers organ donor’s hospitalization expenses, provided the organ is donated to an Insured Person and complies with the Transplantation of Human Organs Act, 1994."
+    },
+    {
+        "question": "Is there coverage for AYUSH treatment under this policy?",
+        "expected": "Yes, inpatient AYUSH treatment is covered up to the Sum Insured in AYUSH hospitals."
+    },
+    {
+        "question": "What is the ambulance reimbursement limit under Plan A?",
+        "expected": "Up to INR 2,500 per insured person in a policy year."
+    },
+    {
+        "question": "What is the waiting period for cataract surgery?",
+        "expected": "Covered after a waiting period of two years."
+    },
+    {
+        "question": "How is No Claim Discount (NCD) calculated?",
+        "expected": "A 5% discount on the base premium is provided on renewal if no claims were made in the expiring policy term."
+    },
+    {
+        "question": "Are infertility treatments covered?",
+        "expected": "Yes, infertility treatment is covered up to INR 50,000 after a waiting period of two years."
+    },
+    {
+        "question": "What is the hospital cash benefit under Plan A?",
+        "expected": "INR 500 per day for a maximum of 5 days after 3 days of hospitalization."
+    },
+    {
+        "question": "Is coverage available for air ambulance services under Plan A?",
+        "expected": "Not covered under Plan A."
+    },
+    {
+        "question": "Does the policy cover HIV/AIDS related medical expenses?",
+        "expected": "Yes, coverage is provided for treatment of HIV at different stages, including AIDS."
+    },
+    {
+        "question": "Is anti-rabies vaccination covered?",
+        "expected": "Yes, up to INR 5,000 per policy year without hospitalization."
+    },
+    {
+        "question": "What is the waiting period for maternity claims?",
+        "expected": "24 months of continuous coverage is required."
+    },
+    {
+        "question": "Are dental treatments covered under this policy?",
+        "expected": "Covered only if necessitated due to an injury."
+    },
+    {
+        "question": "Does the policy cover correction of vision due to refractive error?",
+        "expected": "Yes, covered for errors ≥ 7.5 dioptres after a 2-year waiting period."
+    },
+    {
+        "question": "What is the hospitalization limit for Domiciliary treatment?",
+        "expected": "Up to INR 1,00,000 under Plan A."
+    },
+    {
+        "question": "Does the policy include coverage for robotic surgery?",
+        "expected": "Yes, under modern treatment, up to 25% of the Sum Insured."
+    },
+    {
+        "question": "Are vaccinations for children covered under the policy?",
+        "expected": "Yes, vaccinations are covered up to INR 1,000 for male child up to 12 and female child up to 14 years under Plan A."
     }
 ]
 

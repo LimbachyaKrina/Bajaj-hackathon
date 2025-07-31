@@ -1,6 +1,7 @@
 # responder.py
 from openai import OpenAI
 import os
+import re
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -10,6 +11,17 @@ MODEL_NAME = "gpt-4o"
 
 
 def generate_structured_answer(question, chunks):
+    
+    print("="*80)
+    print(f"🔍 DEBUGGING FOR QUESTION:\n{question}\n")
+    print("📄 Top Retrieved Chunks:")
+    for i, chunk in enumerate(chunks):
+        print(f"\n🔹 Chunk {i+1}: {chunk['chunk_id']}")
+        print("-" * 60)
+        print(chunk["content"])
+        print("-" * 60)
+
+    
     """
     Formats a prompt for LLM with top-k chunks, returns structured JSON with:
     - answer
@@ -19,33 +31,38 @@ def generate_structured_answer(question, chunks):
     context_text = "\n---\n".join([f"[{c['chunk_id']}]\n{c['content']}" for c in chunks])
 
     prompt = f"""
-You are a legal and policy document analyst.
-Answer the question below using ONLY the provided chunks.
+            You are an expert in analyzing legal, insurance, and compliance policy documents.
 
-Question:
-{question}
+            Use the chunks provided below to answer the user question as accurately as possible.
+            Do NOT use any external knowledge — rely ONLY on the given text.
 
-Relevant Clauses:
-{context_text}
+            ---
+            Question:
+            {question}
 
-Instructions:
-- Carefully analyze the text to find exact matching clauses.
-- Instructions:
-- Be warm, clear, and supportive in tone — just like a helpful teammate.
-- Stay consistent with past conversation if it helps answer the query.
-- Focus only on the exact task asked. Do not guess beyond the chunks.
-- Provide step-by-step answers when possible.
-- Then explain WHY the clause matches the question.
-- Reference the chunk IDs used.
+            Relevant Clauses:
+            {context_text}
+            ---
 
-Respond with this format:
-{{
-  "question": "...",
-  "answer": "...",
-  "reasoning": "...",
-  "clauses": ["chunk_2", "chunk_4"]
-}}
-"""
+           Instructions:
+            - Extract the answer based only on the chunks.
+            - Avoid speculation or generic responses.
+            - Use exact terms, clause language, or limits (like days, months, ₹ values) mentioned.
+            - If the answer depends on conditions (e.g., eligibility period, age, continuous coverage), clearly mention **all** such conditions.
+            - Mention the clause IDs (chunk_X_pg_Y) that support your answer.
+            - Keep the answer concise, factual, and easy to verify.
+            - Your goal is to maximize alignment with the expected ground truth.
+            ---
+
+            Respond in the following JSON format:
+            {{
+            "question": "...",
+            "answer": "...",           // concise and directly answers the question
+            "reasoning": "...",        // explain why the chunks support the answer
+            "clauses": ["chunk_3_pg_7", "chunk_6_pg_8"]
+            }}
+        """
+
 
     response = client.chat.completions.create(
         model=MODEL_NAME,
@@ -56,8 +73,11 @@ Respond with this format:
 
     try:
         import json
+        # text = response.choices[0].message.content.strip()
+        # return json.loads(text)
         text = response.choices[0].message.content.strip()
-        return json.loads(text)
+        json_block = re.search(r"\{.*\}", text, re.DOTALL).group()
+        return json.loads(json_block)
     except Exception:
         return {
             "question": question,

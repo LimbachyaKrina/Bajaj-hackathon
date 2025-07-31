@@ -86,6 +86,27 @@ def load_index():
         metadata = pickle.load(f)
     return index, metadata
 
+
+def rerank_chunks(chunks, query_embed):
+    """
+    Rerank retrieved chunks based on cosine similarity with query embedding.
+    """
+    def cosine_sim(a, b):
+        a = np.array(a)
+        b = np.array(b)
+        return np.dot(a, b) / (np.linalg.norm(a) * np.linalg.norm(b) + 1e-8)
+
+    scored_chunks = []
+    for chunk in chunks:
+        chunk_embed = get_embedding(chunk["content"])
+        score = cosine_sim(query_embed, chunk_embed)
+        scored_chunks.append((chunk, score))
+
+    # Sort descending and return top 5
+    scored_chunks.sort(key=lambda x: x[1], reverse=True)
+    return [chunk for chunk, _ in scored_chunks[:5]]
+
+
 def search(query, top_k=5):
     index = faiss.read_index("omniscient.index")
     with open("metadata.pkl", "rb") as f:
@@ -93,6 +114,19 @@ def search(query, top_k=5):
     query_vec = get_embedding(query)
     D, I = index.search(np.array([query_vec]).astype("float32"), top_k)
     return [metadata[i] for i in I[0]]
+
+# def search(query, top_k=10):
+#     index = faiss.read_index(INDEX_PATH)
+#     with open(META_PATH, "rb") as f:
+#         metadata = pickle.load(f)
+
+#     query_vec = get_embedding(query)
+#     D, I = index.search(np.array([query_vec]).astype("float32"), top_k)
+#     retrieved_chunks = [metadata[i] for i in I[0]]
+
+#     # 🔁 Apply semantic reranking
+#     return rerank_chunks(retrieved_chunks, query_vec)
+
 
 def run_pipeline(url, questions):
     if not (Path("omniscient.index").exists()):
@@ -104,7 +138,7 @@ def run_pipeline(url, questions):
         print("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
         chunks = chunk_text(cleaned_text)
         structured_chunks = [
-            {"chunk_id": f"chunk_{i+1}", "content": chunk} for i, chunk in enumerate(chunks)
+            {"chunk_id": f"chunk_{i+1}_pg()", "content": chunk} for i, chunk in enumerate(chunks)
         ]
         print("structured_chunks : ", structured_chunks)
         print()
