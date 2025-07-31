@@ -2,8 +2,14 @@
 import streamlit as st
 import requests
 import json
+import os
+from dotenv import load_dotenv
 
-API_URL = "http://localhost:8000/api/v1/hackrx/run"
+load_dotenv()
+
+# Load API URL and API Key from environment
+API_URL = os.getenv("API_URL", "http://localhost:8000/hackrx/run")
+API_KEY = os.getenv("HACKRX_API_KEY")
 
 st.set_page_config(page_title="HackRx RAG Assistant", layout="wide")
 st.title("📄 Intelligent Policy QA System")
@@ -23,9 +29,15 @@ if st.button("🚀 Run Query"):
             "documents": doc_url,
             "questions": questions
         }
+
+        headers = {
+            "Authorization": f"Bearer {API_KEY}",
+            "Content-Type": "application/json"
+        }
+
         with st.spinner("Contacting backend and processing..."):
             try:
-                res = requests.post(API_URL, json=payload)
+                res = requests.post(API_URL, json=payload, headers=headers)
                 res.raise_for_status()
                 results = res.json().get("answers", [])
 
