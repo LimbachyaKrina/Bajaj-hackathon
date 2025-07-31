@@ -1,0 +1,40 @@
+# Web Framework and API
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+pydantic==2.5.0
+
+# HTTP Requests
+requests==2.31.0
+httpx==0.28.1
+
+# PDF Processing
+pdfplumber==0.10.0
+pdfminer.six==20221105
+
+# AI/ML and Embeddings
+openai==1.98.0
+faiss-cpu==1.7.4
+numpy==1.24.3
+
+# Text Processing and NLP
+langchain==0.0.340
+transformers==4.35.2
+tokenizers==0.15.0
+
+# Environment Variables
+python-dotenv==1.0.0
+
+# Streamlit for Web UI
+streamlit==1.28.1
+
+# Additional dependencies for text processing
+regex==2023.8.8
+
+# Data handling
+pandas==2.3.1
+
+# JSON handling (for benchmarking)
+json5==0.9.14
+
+
+python-dotenv
