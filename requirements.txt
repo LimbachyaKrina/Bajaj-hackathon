@@ -9,3 +9,4 @@ numpy==1.26.4
 python-dotenv==1.0.0
 setuptools==75.1.0
 wheel==0.44.0
+cryptography==42.0.8  # Pin to avoid Rust issues
